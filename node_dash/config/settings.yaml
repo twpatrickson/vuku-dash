@@ -1,0 +1,7 @@
+settings:
+  userName: Thomas
+  dashboardTitle: HomeLab Dashboard
+  buttonSize: medium
+  theme: blue
+  timezone: UTC
+  language: en

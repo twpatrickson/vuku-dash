@@ -1,0 +1,38 @@
+shortcuts:
+  - name: Home Assistant
+    url: http://192.168.1.24:8123/
+    icon: https://www.google.com/s2/favicons?sz=64&domain=home-assistant.io
+  - name: Portainer
+    url: http://192.168.1.90:9000/
+    icon: https://www.google.com/s2/favicons?sz=64&domain=portainer.io
+  - name: Proxmox
+    url: https://192.168.1.222:8006/
+    icon: https://www.google.com/s2/favicons?sz=64&domain=proxmox.com
+  - name: Adguard
+    url: http://192.168.1.90:80
+    icon: https://www.google.com/s2/favicons?sz=64&domain=adguard.com
+  - name: Unifi
+    url: https://192.168.1.92:8443/
+    icon: https://www.google.com/s2/favicons?sz=64&domain=ui.com
+  - name: Community Scripts
+    url: https://community-scripts.github.io/ProxmoxVE/
+    icon: https://www.google.com/s2/favicons?sz=64&domain=github.io
+  - name: YouTube
+    url: https://youtube.com
+    icon: https://www.google.com/s2/favicons?sz=64&domain=youtube.com
+  - name: Google
+    url: https://google.com
+    icon: https://www.google.com/s2/favicons?sz=64&domain=google.com
+  - name: Gmail
+    url: https://mail.google.com
+    icon: https://ssl.gstatic.com/ui/v1/icons/mail/rfr/gmail.ico
+  - name: WatchLan
+    url: http://192.168.1.244:8840/
+    icon: >-
+      https://tse2.mm.bing.net/th/id/OIP.l3vIe5jxZ2iW2V0A1Ojp_wHaHa?rs=1&pid=ImgDetMain
+  - name: Router
+    url: http://192.168.1.1
+    icon: https://www.google.com/s2/favicons?sz=64&domain=vodafone.com
+  - name: Netflix
+    url: https://netflix.com
+    icon: https://www.google.com/s2/favicons?sz=64&domain=netflix.com

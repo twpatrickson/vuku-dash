@@ -1,0 +1,11 @@
+version: '3.8'
+
+services:
+  node_dash:
+    build: .
+    ports:
+      - "9665:80"
+    volumes:
+      - /home/tom/docker-projects/node_dash:/usr/src/app
+    restart: unless-stopped
+
