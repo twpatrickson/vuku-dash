@@ -1,4 +1,3 @@
-# vuku-dash
 # Vuku Dash
 
 ## Overview
