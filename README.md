@@ -32,7 +32,7 @@ services:
    volumes:
      - /path/to/host/directory:/usr/src/app
    restart: unless-stopped
-
+```
 ## Project Structure
 vuku_dash/
 ├── Dockerfile
