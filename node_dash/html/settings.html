@@ -1,0 +1,722 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Settings - Node Dash Dashboard</title>
+    <link rel="stylesheet" href="css/styles.css" />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
+    />
+    <style>
+      /* Modern Settings Page Styling with vertical adjustment */
+      .settings-page {
+        min-height: 100vh;
+        width: 100%;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        padding: 2rem 1rem;  /* Reduced top padding */
+        position: relative;
+      }
+
+      .settings-card {
+        background: var(--glass-bg);
+        border-radius: var(--border-radius);
+        box-shadow: var(--shadow);
+        backdrop-filter: var(--glass-blur);
+        border: var(--glass-border);
+        width: 100%;
+        max-width: 800px;
+        padding: 2rem;  /* Slightly reduced padding */
+        position: relative;
+        margin-bottom: 2rem;
+      }
+
+      .settings-header {
+        margin-bottom: 2rem;  /* Reduced margin */
+        text-align: center;
+      }
+
+      .settings-title {
+        font-family: "Poppins", sans-serif;
+        font-size: 2.2rem;  /* Slightly smaller */
+        font-weight: 700;
+        margin-bottom: 0.5rem;  /* Reduced margin */
+        background: linear-gradient(to right, #ffffff, var(--accent-color));
+        -webkit-background-clip: text;
+        background-clip: text;
+        color: transparent;
+        text-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
+      }
+
+      .settings-subtitle {
+        font-size: 1rem;
+        opacity: 0.8;
+        max-width: 600px;
+        margin: 0 auto;
+      }
+
+      .settings-form {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 1.5rem;  /* Reduced gap */
+      }
+
+      .form-section {
+        margin-bottom: 1.5rem;  /* Reduced margin */
+        background: rgba(0, 0, 0, 0.15);
+        border-radius: 16px;
+        padding: 1.25rem;  /* Reduced padding */
+        border: 1px solid rgba(255, 255, 255, 0.1);
+      }
+
+      .form-section h3 {
+        font-family: "Poppins", sans-serif;
+        font-size: 1.2rem;  /* Slightly smaller */
+        color: var(--accent-color);
+        margin-bottom: 1.25rem;  /* Reduced margin */
+        position: relative;
+        display: inline-block;
+        font-weight: 600;
+      }
+
+      .form-section h3::after {
+        content: "";
+        position: absolute;
+        bottom: -6px;
+        left: 0;
+        width: 40px;
+        height: 3px;
+        background: var(--accent-color);
+        border-radius: 3px;
+      }
+
+      .input-group {
+        margin-bottom: 1.25rem;  /* Reduced margin */
+        position: relative;
+      }
+
+      .input-group:last-child {
+        margin-bottom: 0;
+      }
+
+      .input-group label {
+        display: block;
+        margin-bottom: 0.5rem;  /* Reduced margin */
+        font-weight: 500;
+        font-size: 0.95rem;
+        color: rgba(255, 255, 255, 0.9);
+        transition: all 0.2s;
+      }
+
+      .input-group input,
+      .input-group select {
+        width: 100%;
+        padding: 0.75rem 1rem;  /* Reduced padding */
+        border-radius: 12px;
+        border: var(--glass-border);
+        background: rgba(255, 255, 255, 0.05);
+        color: white;
+        font-size: 1rem;
+        font-family: "Inter", sans-serif;
+        transition: all 0.2s;
+        backdrop-filter: var(--glass-blur);
+        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+      }
+
+      .input-group input:focus,
+      .input-group select:focus {
+        outline: none;
+        border-color: var(--accent-color);
+        background: rgba(255, 255, 255, 0.08);
+        box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.2), 0 4px 6px rgba(0, 0, 0, 0.1);
+      }
+
+      .input-group input::placeholder,
+      .input-group select::placeholder {
+        color: rgba(255, 255, 255, 0.4);
+      }
+
+      .theme-selector {
+        display: grid;
+        grid-template-columns: repeat(4, 1fr);
+        gap: 0.75rem;  /* Reduced gap */
+        margin-top: 0.5rem;  /* Reduced margin */
+      }
+
+      .theme-option {
+        aspect-ratio: 1/1;
+        border-radius: 10px;
+        cursor: pointer;
+        transition: all 0.3s;
+        border: 2px solid transparent;
+        position: relative;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
+        overflow: hidden;
+      }
+
+      .theme-option:hover {
+        transform: translateY(-3px);  /* Smaller transform */
+        box-shadow: 0 6px 12px rgba(0, 0, 0, 0.2);
+      }
+
+      .theme-option.active {
+        border-color: white;
+        box-shadow: 0 0 0 2px rgba(255, 255, 255, 0.3), 0 6px 12px rgba(0, 0, 0, 0.2);
+      }
+
+      .theme-option.active::after {
+        content: "\f00c";
+        font-family: "Font Awesome 6 Free";
+        font-weight: 900;
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        color: white;
+        font-size: 1.1rem;  /* Slightly smaller */
+        text-shadow: 0 0 5px rgba(0, 0, 0, 0.7);
+      }
+
+      .theme-option::before {
+        content: "";
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background: linear-gradient(135deg, rgba(255, 255, 255, 0.1), transparent 50%);
+        pointer-events: none;
+      }
+
+      .theme-blue { background: linear-gradient(135deg, #111827, #1e3a5f); }
+      .theme-red { background: linear-gradient(135deg, #7f1d1d, #991b1b); }
+      .theme-green { background: linear-gradient(135deg, #14532d, #166534); }
+      .theme-purple { background: linear-gradient(135deg, #581c87, #7e22ce); }
+
+      .button-row {
+        display: flex;
+        justify-content: space-between;
+        margin-top: 1.75rem;  /* Reduced margin */
+        grid-column: span 2;
+      }
+
+      .btn-back {
+        padding: 0.75rem 1.5rem;  /* Reduced padding */
+        border-radius: 10px;
+        background: rgba(255, 255, 255, 0.1);
+        color: white;
+        font-weight: 500;
+        border: none;
+        font-size: 1rem;
+        cursor: pointer;
+        transition: all 0.3s;
+        display: flex;
+        align-items: center;
+        gap: 0.75rem;
+        text-decoration: none;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        border: 1px solid rgba(255, 255, 255, 0.05);
+      }
+
+      .btn-back:hover {
+        background: rgba(255, 255, 255, 0.15);
+        transform: translateY(-2px);
+        box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
+      }
+
+      .btn-save {
+        padding: 0.75rem 1.75rem;  /* Reduced padding */
+        border-radius: 10px;
+        background: var(--accent-color);
+        color: white;
+        font-weight: 600;
+        border: none;
+        font-size: 1rem;
+        cursor: pointer;
+        transition: all 0.3s;
+        position: relative;
+        overflow: hidden;
+        box-shadow: 0 4px 10px rgba(59, 130, 246, 0.3);
+      }
+
+      .btn-save::before {
+        content: "";
+        position: absolute;
+        top: 0;
+        left: -100%;
+        width: 100%;
+        height: 100%;
+        background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+        transition: left 0.7s ease;
+      }
+
+      .btn-save:hover {
+        background: #4f8ef5;
+        transform: translateY(-2px);
+        box-shadow: 0 6px 15px rgba(59, 130, 246, 0.4);
+      }
+
+      .btn-save:hover::before {
+        left: 100%;
+      }
+
+      .btn-save:active {
+        transform: translateY(1px);
+      }
+
+      .btn-back:active {
+        transform: translateY(1px);
+      }
+
+      .size-option {
+        border-radius: 10px;
+        border: 2px solid rgba(255, 255, 255, 0.1);
+        background: rgba(255, 255, 255, 0.05);
+        padding: 0.75rem;  /* Reduced padding */
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 0.5rem;
+        cursor: pointer;
+        transition: all 0.2s;
+      }
+
+      .size-option:hover {
+        background: rgba(255, 255, 255, 0.08);
+        transform: translateY(-2px);  /* Smaller transform */
+      }
+
+      .size-option.active {
+        border-color: var(--accent-color);
+        background: rgba(59, 130, 246, 0.1);
+      }
+
+      .size-preview {
+        width: 100%;
+        display: flex;
+        justify-content: center;
+      }
+
+      .size-preview-item {
+        background: rgba(255, 255, 255, 0.1);
+        border-radius: 8px;
+      }
+
+      .size-preview-small .size-preview-item {
+        width: 35px;
+        height: 35px;
+      }
+
+      .size-preview-medium .size-preview-item {
+        width: 50px;
+        height: 50px;
+      }
+
+      .size-preview-large .size-preview-item {
+        width: 65px;
+        height: 65px;
+      }
+
+      .size-option-label {
+        font-weight: 500;
+        font-size: 0.85rem;  /* Slightly smaller */
+      }
+
+      .size-options {
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        gap: 0.75rem;  /* Reduced gap */
+        margin-top: 0.5rem;  /* Reduced margin */
+      }
+
+      /* Success message */
+      .success-message {
+        position: fixed;
+        top: 20px;
+        right: 20px;
+        background: rgba(16, 185, 129, 0.9);
+        color: white;
+        padding: 1rem 1.5rem;
+        border-radius: 10px;
+        display: flex;
+        align-items: center;
+        gap: 0.75rem;
+        transform: translateX(calc(100% + 20px));
+        transition: transform 0.3s ease;
+        z-index: 1000;
+        box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+        backdrop-filter: blur(10px);
+      }
+
+      .success-message.show {
+        transform: translateX(0);
+      }
+
+      .success-icon {
+        background: rgba(255, 255, 255, 0.2);
+        width: 30px;
+        height: 30px;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+      }
+
+      /* Footer styling */
+      .footer {
+        position: fixed;
+        bottom: 15px;
+        left: 15px;
+        font-size: 0.85rem;
+        color: rgba(255, 255, 255, 0.6);
+        z-index: 100;
+      }
+
+      @media (max-width: 768px) {
+        .settings-form {
+          grid-template-columns: 1fr;
+        }
+        
+        .button-row {
+          grid-column: span 1;
+        }
+        
+        .theme-selector {
+          grid-template-columns: repeat(2, 1fr);
+        }
+        
+        .settings-card {
+          padding: 1.25rem;
+        }
+        
+        .settings-title {
+          font-size: 1.8rem;
+        }
+        
+        .size-options {
+          grid-template-columns: repeat(3, 1fr);
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <div class="settings-page">
+      <div class="settings-card">
+        <div class="settings-header">
+          <h1 class="settings-title">Dashboard Settings</h1>
+          <p class="settings-subtitle">Customize your Vuku Dash Dashboard</p>
+        </div>
+        
+        <form id="settingsForm" class="settings-form">
+          <!-- Profile Section -->
+          <div class="form-section">
+            <h3>User Profile</h3>
+            
+            <div class="input-group">
+              <label for="userName">Display Name</label>
+              <input type="text" id="userName" placeholder="Enter your name" value="Thomas" />
+            </div>
+            
+            <div class="input-group">
+              <label for="timezone">Timezone</label>
+              <select id="timezone">
+                <option value="UTC" selected>UTC</option>
+                <option value="America/New_York">Eastern Time (ET)</option>
+                <option value="America/Chicago">Central Time (CT)</option>
+                <option value="America/Denver">Mountain Time (MT)</option>
+                <option value="America/Los_Angeles">Pacific Time (PT)</option>
+                <option value="Europe/London">London (GMT)</option>
+                <option value="Europe/Paris">Paris (CET)</option>
+                <option value="Asia/Tokyo">Tokyo (JST)</option>
+                <option value="Asia/Singapore">Singapore (SGT)</option>
+                <option value="Australia/Sydney">Sydney (AEST)</option>
+              </select>
+            </div>
+            
+            <div class="input-group">
+              <label for="language">Language</label>
+              <select id="language">
+                <option value="en" selected>English</option>
+                <option value="es">Español</option>
+                <option value="fr">Français</option>
+                <option value="de">Deutsch</option>
+                <option value="zh">中文</option>
+                <option value="ja">日本語</option>
+              </select>
+            </div>
+          </div>
+          
+          <!-- Dashboard Section -->
+          <div class="form-section">
+            <h3>Dashboard Preferences</h3>
+            
+            <div class="input-group">
+              <label for="dashboardTitle">Dashboard Title</label>
+              <input type="text" id="dashboardTitle" placeholder="Enter dashboard title" value="HomeLab Dashboard" />
+            </div>
+            
+            <div class="input-group">
+              <label>Shortcut Size</label>
+              <div class="size-options">
+                <div class="size-option" data-size="small">
+                  <div class="size-preview size-preview-small">
+                    <div class="size-preview-item"></div>
+                  </div>
+                  <span class="size-option-label">Small</span>
+                </div>
+                <div class="size-option active" data-size="medium">
+                  <div class="size-preview size-preview-medium">
+                    <div class="size-preview-item"></div>
+                  </div>
+                  <span class="size-option-label">Medium</span>
+                </div>
+                <div class="size-option" data-size="large">
+                  <div class="size-preview size-preview-large">
+                    <div class="size-preview-item"></div>
+                  </div>
+                  <span class="size-option-label">Large</span>
+                </div>
+              </div>
+            </div>
+            
+            <div class="input-group">
+              <label>Theme</label>
+              <div class="theme-selector">
+                <div class="theme-option theme-blue active" data-theme="blue"></div>
+                <div class="theme-option theme-red" data-theme="red"></div>
+                <div class="theme-option theme-green" data-theme="green"></div>
+                <div class="theme-option theme-purple" data-theme="purple"></div>
+              </div>
+            </div>
+          </div>
+          
+          <!-- Buttons -->
+          <div class="button-row">
+            <a href="index.html" class="btn-back">
+              <i class="fas fa-arrow-left"></i> Back to Dashboard
+            </a>
+            <button type="button" id="saveButton" class="btn-save">
+              <i class="fas fa-save"></i> Save Settings
+            </button>
+          </div>
+        </form>
+      </div>
+
+      <!-- Footer -->
+      <div class="footer">Vuku Dash &reg;</div>
+    </div>
+    
+    <!-- Success Message -->
+    <div id="successMessage" class="success-message">
+      <div class="success-icon">
+        <i class="fas fa-check"></i>
+      </div>
+      <div>Settings saved successfully!</div>
+    </div>
+    
+    <script>
+      // Get the current theme from URL parameters or localStorage
+      function getCurrentTheme() {
+        // Check URL parameters first
+        const urlParams = new URLSearchParams(window.location.search);
+        const themeParam = urlParams.get('theme');
+        
+        if (themeParam && ['blue', 'red', 'green', 'purple'].includes(themeParam)) {
+          return themeParam;
+        }
+        
+        // Then check localStorage
+        try {
+          const storedSettings = localStorage.getItem('nodeDashSettings');
+          if (storedSettings) {
+            const settings = JSON.parse(storedSettings);
+            if (settings.theme) {
+              return settings.theme;
+            }
+          }
+        } catch (e) {
+          console.error('Error retrieving theme from localStorage:', e);
+        }
+        
+        // Default theme
+        return 'blue';
+      }
+      
+      // Apply current theme to body
+      document.body.setAttribute('data-theme', getCurrentTheme());
+      
+      // Theme selector functionality
+      const themeOptions = document.querySelectorAll('.theme-option');
+      
+      themeOptions.forEach(option => {
+        option.addEventListener('click', function() {
+          // Remove active class from all options
+          themeOptions.forEach(opt => opt.classList.remove('active'));
+          
+          // Add active class to clicked option
+          this.classList.add('active');
+          
+          // Apply theme immediately for preview
+          document.body.setAttribute('data-theme', this.getAttribute('data-theme'));
+        });
+      });
+      
+      // Size selector functionality
+      const sizeOptions = document.querySelectorAll('.size-option');
+      let selectedSize = 'medium';
+      
+      sizeOptions.forEach(option => {
+        option.addEventListener('click', function() {
+          // Remove active class from all options
+          sizeOptions.forEach(opt => opt.classList.remove('active'));
+          
+          // Add active class to clicked option
+          this.classList.add('active');
+          
+          // Store selected size
+          selectedSize = this.getAttribute('data-size');
+        });
+      });
+      
+      // Handle form submission
+      document.getElementById('saveButton').addEventListener('click', function(e) {
+        e.preventDefault();
+        
+        // Get form values
+        const settings = {
+          userName: document.getElementById('userName').value,
+          dashboardTitle: document.getElementById('dashboardTitle').value,
+          buttonSize: selectedSize,
+          theme: document.querySelector('.theme-option.active').getAttribute('data-theme'),
+          timezone: document.getElementById('timezone').value,
+          language: document.getElementById('language').value
+        };
+        
+        // Save to localStorage for persistence
+        localStorage.setItem('nodeDashSettings', JSON.stringify(settings));
+        
+        // Also try to save to the server (but don't block on success)
+        fetch('/api/save-settings', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify({ settings })
+        })
+        .then(response => response.json())
+        .then(data => {
+          if (!data.success) {
+            console.warn('Server settings save failed, but settings are saved in localStorage:', data.message);
+          }
+        })
+        .catch(error => {
+          console.warn('Error saving settings to server, but settings are saved in localStorage:', error);
+        })
+        .finally(() => {
+          // Show success message
+          const successMessage = document.getElementById('successMessage');
+          successMessage.classList.add('show');
+          
+          // Hide success message after 3 seconds
+          setTimeout(() => {
+            successMessage.classList.remove('show');
+            // Redirect after animation completes
+            setTimeout(() => {
+              window.location.href = 'index.html';
+            }, 300);
+          }, 1500);
+        });
+      });
+      
+      // Load saved settings on page load
+      window.addEventListener('load', function() {
+        try {
+          const storedSettings = localStorage.getItem('nodeDashSettings');
+          if (storedSettings) {
+            const settings = JSON.parse(storedSettings);
+            
+            // Populate form fields
+            document.getElementById('userName').value = settings.userName || '';
+            document.getElementById('dashboardTitle').value = settings.dashboardTitle || '';
+            
+            // Set active size option
+            if (settings.buttonSize) {
+              selectedSize = settings.buttonSize;
+              sizeOptions.forEach(opt => opt.classList.remove('active'));
+              const sizeOption = document.querySelector(`.size-option[data-size="${settings.buttonSize}"]`);
+              if (sizeOption) {
+                sizeOption.classList.add('active');
+              }
+            }
+            
+            document.getElementById('timezone').value = settings.timezone || 'UTC';
+            document.getElementById('language').value = settings.language || 'en';
+            
+            // Set active theme
+            if (settings.theme) {
+              themeOptions.forEach(opt => opt.classList.remove('active'));
+              const themeOption = document.querySelector(`.theme-option[data-theme="${settings.theme}"]`);
+              if (themeOption) {
+                themeOption.classList.add('active');
+              }
+              // Apply theme to body
+              document.body.setAttribute('data-theme', settings.theme);
+            }
+          }
+        } catch (e) {
+          console.error('Error loading settings from localStorage:', e);
+        }
+        
+        // Also try to get settings from server as a backup
+        fetch('/api/get-settings')
+          .then(response => response.json())
+          .then(data => {
+            if (data.success && data.settings) {
+              // Only use server settings if we don't have local settings
+              const existingSettings = localStorage.getItem('nodeDashSettings');
+              if (!existingSettings) {
+                const settings = data.settings;
+                
+                // Populate form fields
+                document.getElementById('userName').value = settings.userName || '';
+                document.getElementById('dashboardTitle').value = settings.dashboardTitle || '';
+                
+                // Set active size option
+                if (settings.buttonSize) {
+                  selectedSize = settings.buttonSize;
+                  sizeOptions.forEach(opt => opt.classList.remove('active'));
+                  const sizeOption = document.querySelector(`.size-option[data-size="${settings.buttonSize}"]`);
+                  if (sizeOption) {
+                    sizeOption.classList.add('active');
+                  }
+                }
+                
+                document.getElementById('timezone').value = settings.timezone || 'UTC';
+                document.getElementById('language').value = settings.language || 'en';
+                
+                // Set active theme
+                if (settings.theme) {
+                  themeOptions.forEach(opt => opt.classList.remove('active'));
+                  const themeOption = document.querySelector(`.theme-option[data-theme="${settings.theme}"]`);
+                  if (themeOption) {
+                    themeOption.classList.add('active');
+                  }
+                  // Apply theme to body
+                  document.body.setAttribute('data-theme', settings.theme);
+                }
+                
+                // Save to localStorage
+                localStorage.setItem('nodeDashSettings', JSON.stringify(settings));
+              }
+            }
+          })
+          .catch(error => {
+            console.warn('Error loading settings from server, using localStorage or defaults:', error);
+          });
+      });
+    </script>
+  </body>
+</html>

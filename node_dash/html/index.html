@@ -1,0 +1,314 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Node Dash Dashboard</title>
+    <link rel="stylesheet" href="css/styles.css" />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
+    />
+  </head>
+  <body>
+    <!-- Settings icon with larger clickable area -->
+    <a href="settings.html" class="settings-icon" title="Settings">
+      <i class="fas fa-cog"></i>
+    </a>
+
+    <div class="top-bar">
+      <div class="welcome-container">
+        <h1 id="welcomeUser">Hello, Tom</h1>
+        <p class="welcome" id="dashboardTitleText">Welcome to your Node Dash Dashboard</p>
+      </div>
+    </div>
+
+    <div class="search-container">
+      <form id="search-form" action="https://www.google.com/search" method="get" target="_blank">
+        <div class="search-wrapper">
+          <i class="fas fa-search search-icon"></i>
+          <input
+            type="text"
+            id="search-input"
+            name="q"
+            placeholder="Search Google or enter a URL"
+            autocomplete="off"
+          />
+        </div>
+      </form>
+    </div>
+
+    <div class="container">
+      <div class="panel">
+        <div class="panel-header">
+          <div class="panel-title" id="quickAccessTitle">Quick Access</div>
+        </div>
+        <div class="dashboard" id="dashboard">
+          <!-- Shortcuts loaded from YAML or added via API will appear here -->
+          <div class="tile add-button" id="add-button">
+            <i class="fas fa-plus"></i> Add Shortcut
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="footer">Vuku Dash &reg;</div>
+
+    <!-- Modal for Adding a Shortcut -->
+    <div id="addModal" class="modal">
+      <div class="modal-content">
+        <span class="close" id="closeModal">&times;</span>
+        <h2>Add New Shortcut</h2>
+        <form id="addForm">
+          <div class="form-group">
+            <label for="name">Name</label>
+            <input type="text" id="name" placeholder="e.g. YouTube" required />
+          </div>
+          <div class="form-group">
+            <label for="url">URL</label>
+            <input type="url" id="url" placeholder="e.g. https://youtube.com" required />
+          </div>
+          <div class="form-group">
+            <label for="iconUrl">Icon URL (optional)</label>
+            <input type="url" id="iconUrl" placeholder="e.g. https://example.com/icon.png" />
+          </div>
+          <div class="button-group">
+            <button type="button" class="btn btn-secondary" id="cancelButton">
+              Cancel
+            </button>
+            <button type="submit" class="btn btn-primary">
+              Add Shortcut
+            </button>
+          </div>
+        </form>
+      </div>
+    </div>
+
+    <script>
+      // Simple settings implementation using localStorage as a fallback
+      const defaultSettings = {
+        userName: 'Tom',
+        dashboardTitle: 'Node Dash Dashboard',
+        buttonSize: 'medium',
+        theme: 'blue',
+        timezone: 'UTC',
+        language: 'en'
+      };
+
+      // Function to load settings (from API or localStorage or defaults)
+      function loadAndApplySettings() {
+        // Try to get settings from localStorage first as a fallback
+        let settings = defaultSettings;
+        
+        try {
+          const storedSettings = localStorage.getItem('nodeDashSettings');
+          if (storedSettings) {
+            settings = JSON.parse(storedSettings);
+          }
+        } catch (e) {
+          console.error('Error loading settings from localStorage:', e);
+        }
+        
+        // Then try the API
+        fetch('/api/get-settings')
+          .then(response => response.json())
+          .then(data => {
+            if (data.success && data.settings) {
+              settings = data.settings;
+              // Save to localStorage as backup
+              localStorage.setItem('nodeDashSettings', JSON.stringify(settings));
+            }
+          })
+          .catch(error => {
+            console.warn('Error loading settings from API, using localStorage or defaults:', error);
+          })
+          .finally(() => {
+            // Apply settings regardless of source
+            applySettings(settings);
+          });
+      }
+
+      // Function to apply settings to the UI
+      function applySettings(settings) {
+        console.log('Applying settings:', settings);
+        
+        // Apply username
+        if (settings.userName) {
+          document.getElementById('welcomeUser').textContent = `Hello, ${settings.userName}`;
+        }
+        
+        // Apply dashboard title
+        if (settings.dashboardTitle) {
+          document.getElementById('dashboardTitleText').textContent = 
+            `Welcome to your ${settings.dashboardTitle}`;
+          document.title = settings.dashboardTitle;
+        }
+        
+        // Apply theme
+        if (settings.theme) {
+          document.body.setAttribute('data-theme', settings.theme);
+        }
+        
+        // Apply button size
+        if (settings.buttonSize) {
+          const dashboard = document.getElementById('dashboard');
+          dashboard.classList.remove('size-small', 'size-medium', 'size-large');
+          dashboard.classList.add(`size-${settings.buttonSize}`);
+        }
+      }
+
+      // Update search form action based on input
+      const searchInput = document.getElementById('search-input');
+      const searchForm = document.getElementById('search-form');
+      searchInput.addEventListener('keyup', function () {
+        const input = this.value.trim();
+        if (input.startsWith('http://') || input.startsWith('https://')) {
+          searchForm.action = input;
+        } else {
+          searchForm.action = 'https://www.google.com/search';
+        }
+      });
+
+      // Modal handling for Add Shortcut
+      const addButton = document.getElementById('add-button');
+      const modal = document.getElementById('addModal');
+      const closeModal = document.getElementById('closeModal');
+      const cancelButton = document.getElementById('cancelButton');
+
+      addButton.addEventListener('click', function () {
+        modal.style.display = 'block';
+      });
+
+      closeModal.addEventListener('click', function () {
+        modal.style.display = 'none';
+      });
+
+      cancelButton.addEventListener('click', function () {
+        modal.style.display = 'none';
+      });
+
+      window.addEventListener('click', function (event) {
+        if (event.target === modal) {
+          modal.style.display = 'none';
+        }
+      });
+
+      // Function to create a shortcut tile in the dashboard
+      function createShortcutTile(name, url, iconUrl) {
+        const dashboard = document.getElementById('dashboard');
+        const newTile = document.createElement('a');
+        newTile.href = url;
+        newTile.target = '_blank';
+        newTile.className = 'tile';
+        newTile.setAttribute('data-default', 'false');
+        newTile.setAttribute('data-name', name); // Store name for deletion reference
+
+        const removeButton = document.createElement('div');
+        removeButton.className = 'remove-shortcut';
+        removeButton.innerHTML = '&times;';
+        removeButton.addEventListener('click', function (e) {
+          e.preventDefault();
+          e.stopPropagation();
+          
+          // Modified delete functionality to also remove from YAML file via API
+          if (confirm(`Are you sure you want to delete the shortcut to ${name}?`)) {
+            // Call API to delete from YAML file
+            fetch('/api/delete-shortcut', {
+              method: 'POST',
+              headers: { 'Content-Type': 'application/json' },
+              body: JSON.stringify({ name: name })
+            })
+              .then(response => response.json())
+              .then(data => {
+                if (data.success) {
+                  dashboard.removeChild(newTile);
+                  console.log(`Shortcut "${name}" deleted successfully`);
+                } else {
+                  console.error('Error deleting shortcut:', data.message);
+                  alert('Error deleting shortcut: ' + (data.message || 'Unknown error'));
+                }
+              })
+              .catch(err => {
+                console.error('Error deleting shortcut:', err);
+                alert('Error connecting to server. The shortcut was not deleted.');
+              });
+          }
+        });
+        newTile.appendChild(removeButton);
+
+        const iconWrapper = document.createElement('div');
+        iconWrapper.className = 'icon-wrapper';
+        const img = document.createElement('img');
+        img.src = iconUrl;
+        img.alt = name;
+        iconWrapper.appendChild(img);
+        newTile.appendChild(iconWrapper);
+
+        const textNode = document.createTextNode(name);
+        newTile.appendChild(textNode);
+
+        // Insert new tile before the "Add Shortcut" button
+        const addButtonTile = document.querySelector('.add-button');
+        dashboard.insertBefore(newTile, addButtonTile);
+
+        return newTile;
+      }
+
+      // Handle form submission to add a new shortcut
+      document.getElementById('addForm').addEventListener('submit', function (e) {
+        e.preventDefault();
+        const name = document.getElementById('name').value;
+        const url = document.getElementById('url').value;
+        let iconUrl = document.getElementById('iconUrl').value;
+        if (!iconUrl) {
+          try {
+            const domain = new URL(url).hostname;
+            iconUrl = `https://www.google.com/s2/favicons?sz=64&domain=${domain}`;
+          } catch (error) {
+            iconUrl = "https://cdn-icons-png.flaticon.com/512/841/841364.png";
+          }
+        }
+        
+        fetch('/api/add-shortcut', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ name, url, icon: iconUrl })
+        })
+          .then(response => response.json())
+          .then(data => {
+            if (data.success) {
+              alert('Shortcut added successfully!');
+              createShortcutTile(name, url, iconUrl);
+            } else {
+              alert('Error adding shortcut');
+            }
+          })
+          .catch(err => {
+            console.error(err);
+            alert('Error adding shortcut');
+          });
+
+        this.reset();
+        modal.style.display = 'none';
+      });
+
+      // On page load, fetch and render shortcuts from the YAML file
+      window.addEventListener('load', function() {
+        // Load and apply settings
+        loadAndApplySettings();
+        
+        // Load shortcuts
+        fetch('/api/get-shortcuts')
+          .then(response => response.json())
+          .then(data => {
+            if (data.success && Array.isArray(data.shortcuts)) {
+              data.shortcuts.forEach(shortcut => {
+                createShortcutTile(shortcut.name, shortcut.url, shortcut.icon);
+              });
+            }
+          })
+          .catch(error => console.error('Error fetching shortcuts:', error));
+      });
+    </script>
+  </body>
+</html>

@@ -1,0 +1,16 @@
+{
+  "name": "node_dash",
+  "version": "1.0.0",
+  "description": "Node.js dashboard that serves static files and API endpoints for shortcuts",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js"
+  },
+  "dependencies": {
+    "express": "^4.21.2",
+    "js-yaml": "^4.1.0"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC"
+}
