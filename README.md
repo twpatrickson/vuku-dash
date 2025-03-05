@@ -67,3 +67,16 @@ Tile Sizes: Small, Medium, Large
 Display Name: Personalize your greeting
 Dashboard Title: Customize the dashboard title
 Language and Timezone: Set your preferred language and timezone (Not Functional)
+
+## Screenshots 
+Main Page:
+![image](https://github.com/user-attachments/assets/9f9ae913-2f6c-4f82-ad63-55e08fd0a9ed)
+
+Add Shortcut (GUI):
+![image](https://github.com/user-attachments/assets/04411a17-3209-4d99-b1a4-21f94821c7ba)
+
+Settings Page:
+![image](https://github.com/user-attachments/assets/b1456599-fd3f-46b0-a449-320d3b330bbb)
+
+
+
