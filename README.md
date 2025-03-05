@@ -59,7 +59,7 @@ settings.yaml: Stores user preferences including display name, theme, and UI set
 ## Local Storage Fallback
 For improved reliability, user settings are also cached in the browser's localStorage, providing a seamless experience even if there are issues with the server-side storage.
 
-##Customization
+## Customization
 The dashboard offers multiple customization options:
 
 Themes: Blue, Red, Green, Purple
