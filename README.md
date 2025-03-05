@@ -34,6 +34,7 @@ services:
    restart: unless-stopped
 ```
 ## Project Structure
+```yaml
 vuku_dash/
 ├── Dockerfile
 ├── docker-compose.yaml
@@ -48,7 +49,7 @@ vuku_dash/
 │   └── shortcuts.yaml
 ├── package.json
 └── server.js
-
+```
 ## Configuration
 Settings and shortcuts are stored in YAML files for persistence:
 
