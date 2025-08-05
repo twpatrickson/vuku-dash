@@ -1,4 +1,4 @@
-FROM node:16-alpine
+FROM nginx:1.29.0-alpine3.22-slim
 
 WORKDIR /usr/src/app
 
